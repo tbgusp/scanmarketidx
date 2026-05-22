@@ -1,0 +1,33 @@
+# Database dan output lokal — tidak perlu diupload
+db/articles.db
+output/*.html
+scan/*.html
+
+# Log
+scraper.log
+*.log
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environment
+venv/
+env/
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# PENTING: Jangan pernah commit file yang berisi secret!
+# Semua secret disimpan di GitHub Secrets, bukan di file
+secrets.json
+.env.local

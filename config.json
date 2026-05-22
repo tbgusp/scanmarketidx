@@ -1,0 +1,80 @@
+{
+  "anthropic_api_key": "DIISI_OTOMATIS_DARI_GITHUB_SECRETS",
+
+  "github": {
+    "token":     "DIISI_OTOMATIS_DARI_GITHUB_SECRETS",
+    "repo":      "tbgusp/scanmarketidx",
+    "branch":    "main",
+    "pages_url": "https://tbgusp.github.io/scanmarketidx"
+  },
+
+  "telegram": {
+    "bot_token":  "DIISI_OTOMATIS_DARI_GITHUB_SECRETS",
+    "channel_id": "DIISI_OTOMATIS_DARI_GITHUB_SECRETS"
+  },
+
+  "schedule": {
+    "pagi": "06:00",
+    "sore": "18:00"
+  },
+
+  "model": {
+    "screening":     "claude-haiku-4-5-20251001",
+    "deep_analysis": "claude-sonnet-4-20250514"
+  },
+
+  "score_threshold": {
+    "signal_kuat": 80,
+    "radar":       65,
+    "pantau":      50
+  },
+
+  "scraper": {
+    "request_delay_min": 2,
+    "request_delay_max": 5,
+    "timeout":           30,
+    "max_retries":       3
+  },
+
+  "sources": {
+    "cnbc": {
+      "enabled":       true,
+      "source_url":    "https://www.cnbcindonesia.com/market/indeks/5",
+      "pages_per_run": 3,
+      "max_articles":  30
+    },
+    "bloomberg": {
+      "enabled":      true,
+      "days_back":    3,
+      "max_articles": 30
+    },
+    "idxchannel": {
+      "enabled":      true,
+      "max_articles": 30
+    },
+    "idnfinancials": {
+      "enabled":      true,
+      "max_articles": 30
+    },
+    "emitennews": {
+      "enabled":      true,
+      "max_articles": 30
+    },
+    "investorid": {
+      "enabled":      true,
+      "source_url":   "https://investor.id/market",
+      "max_articles": 30
+    },
+    "kontan": {
+      "enabled":      true,
+      "days_back":    3,
+      "max_articles": 30
+    },
+    "liputan6": {
+      "enabled":      true,
+      "rss_url":      "https://feed.liputan6.com/rss/saham",
+      "days_back":    3,
+      "max_articles": 30
+    }
+  }
+}
