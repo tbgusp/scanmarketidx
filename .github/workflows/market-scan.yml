@@ -2,9 +2,13 @@ name: Market Scan IDX
 
 on:
   schedule:
-    # Jam 06:00 WIB = 23:00 UTC (hari sebelumnya)
-    - cron: '0 23 * * 0-4'   # Senin–Jumat (Minggu–Kamis UTC = Senin–Jumat WIB)
-  workflow_dispatch:           # bisa trigger manual dari GitHub UI
+    # WIB = UTC+7, jadi dikurangi 7 jam
+    - cron: '0 23 * * *'   # 06:00 WIB setiap hari
+    - cron: '0 5 * * *'    # 12:00 WIB setiap hari
+    - cron: '0 11 * * *'   # 18:00 WIB setiap hari
+    - cron: '0 17 * * *'   # 00:00 WIB setiap hari
+  workflow_dispatch:
+    # Tombol "Run workflow" manual di tab Actions GitHub
 
 jobs:
   scan:
@@ -25,21 +29,26 @@ jobs:
           pip install --upgrade pip
           pip install requests beautifulsoup4 anthropic
 
-      - name: Run Market Scan
+      - name: Inject secrets ke config
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          GITHUB_TOKEN_SCAN: ${{ secrets.SCAN_GITHUB_TOKEN }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          ANTHROPIC_API_KEY:   ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN_SCAN:   ${{ secrets.SCAN_GITHUB_TOKEN }}
+          TELEGRAM_BOT_TOKEN:  ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
-        run: |
-          cd "4. News Scrapper"
-          python inject_secrets.py
-          python main.py
+        run: python inject_secrets.py
 
-      - name: Upload log sebagai artifact (untuk debug)
+      - name: Jalankan Market Scan
+        env:
+          ANTHROPIC_API_KEY:   ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN_SCAN:   ${{ secrets.SCAN_GITHUB_TOKEN }}
+          TELEGRAM_BOT_TOKEN:  ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+        run: python main.py
+
+      - name: Simpan log untuk debug
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: scraper-log-${{ github.run_id }}
-          path: "4. News Scrapper/scraper.log"
+          name: log-${{ github.run_id }}
+          path: scraper.log
           retention-days: 7
