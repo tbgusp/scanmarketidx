@@ -1,0 +1,45 @@
+name: Market Scan IDX
+
+on:
+  schedule:
+    # Jam 06:00 WIB = 23:00 UTC (hari sebelumnya)
+    - cron: '0 23 * * 0-4'   # Senin–Jumat (Minggu–Kamis UTC = Senin–Jumat WIB)
+  workflow_dispatch:           # bisa trigger manual dari GitHub UI
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install requests beautifulsoup4 anthropic
+
+      - name: Run Market Scan
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN_SCAN: ${{ secrets.SCAN_GITHUB_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+        run: |
+          cd "4. News Scrapper"
+          python inject_secrets.py
+          python main.py
+
+      - name: Upload log sebagai artifact (untuk debug)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scraper-log-${{ github.run_id }}
+          path: "4. News Scrapper/scraper.log"
+          retention-days: 7
