@@ -241,7 +241,7 @@ def render_artikel_card(artikel, threshold, idx):
     <button class="btn-toggle" onclick="toggleDetail('{expand_id}', this)">
       <span class="ico">▾</span> {toggle_label}
     </button>
-    {f'<button class="btn-toggle btn-toggle-sonnet" onclick="toggleDetail(\'{deep_id}\', this)"><span class="ico">▾</span> Analisis Mendalam</button>' if deep_analysis_html else ''}
+    {('<button class="btn-toggle btn-toggle-sonnet" onclick="toggleDetail(\'' + deep_id + '\', this)"><span class="ico">▾</span> Analisis Mendalam</button>') if deep_analysis_html else ''}
     <a href="{url}" target="_blank" rel="noopener" class="btn-read">Baca artikel →</a>
   </div>
 
